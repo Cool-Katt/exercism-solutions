@@ -1,0 +1,18 @@
+(ns yacht)
+(def sum (partial reduce +))
+(defn score [dice cat]
+  (case cat
+    "ones" (->> dice (map #{1}) (remove nil?) sum)
+    "twos" (->> dice (map #{2}) (remove nil?) sum)
+    "threes" (->> dice (map #{3}) (remove nil?) sum)
+    "fours" (->> dice (map #{4}) (remove nil?) sum)
+    "fives" (->> dice (map #{5}) (remove nil?) sum)
+    "sixes" (->> dice (map #{6}) (remove nil?) sum)
+    "full house" (if (= #{3 2} (->> dice (group-by identity) vals (map count) set)) (sum dice) 0)
+    "four of a kind" (->> dice (group-by identity) vals (filter #(#{4 5} (count %))) flatten (take 4) sum)
+    "little straight" (if (= (set dice) #{1 2 3 4 5}) 30 0)
+    "big straight" (if (= (set dice) #{2 3 4 5 6}) 30 0)
+    "choice" (sum dice)
+    "yacht" (if (= (count (set dice)) 1) 50 0)
+  )
+)
