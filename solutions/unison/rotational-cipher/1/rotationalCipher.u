@@ -1,0 +1,12 @@
+rotationalCipher.rotate : Text -> Nat -> Text
+rotationalCipher.rotate text shiftKey = map (ch -> shiftCharRight ch shiftKey) text
+
+rotationalCipher.shiftCharRight : Char -> Nat -> Char
+rotationalCipher.shiftCharRight = cases
+  ch, n | inRange ?a ?z ch -> toNat ?a + mod ((toNat ch - toNat ?a) + n) 26
+                               |> Char.fromNat
+                               |> Optional.getOrElse ch
+  ch, n | inRange ?A ?Z ch -> toNat ?A + mod ((toNat ch - toNat ?A) + n) 26
+                               |> Char.fromNat
+                               |> Optional.getOrElse ch
+  ch, _ -> ch
